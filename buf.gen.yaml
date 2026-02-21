@@ -1,0 +1,24 @@
+
+# подробнее: https://buf.build/docs/configuration/v2/buf-gen-yaml
+version: v2
+
+managed:
+
+  enabled: true
+  disable:
+    - path: vendor.protobuf
+plugins:
+  #генерация go типов для message и enum
+  - local: ./bin/protoc-gen-go
+    out: gen
+    opt:
+      - paths=source_relative
+
+  #генерация grpc сервиса и клиента
+  - local: ./bin/protoc-gen-go-grpc
+    out: gen
+    opt:
+      - paths=source_relative
+
+inputs:
+  - directory: proto #путь до наших файлов protobuf
