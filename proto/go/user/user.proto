@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto.go.user;
+
+option go_package = "github.com/Chaice1/Order-Service/proto/go/user;userpb";
+
+import "buf/validate/validate.proto";
+
+service UserService{
+    rpc GetUser(GetUserRequest) returns (GetUserResponce);
+}
+
+message GetUserRequest{
+    string user_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message GetUserResponce{
+    string id = 1 [(buf.validate.field).string.min_len = 1];
+    string username = 2 [(buf.validate.field).string.min_len = 1];
+    bool is_active = 3;
+}
+
