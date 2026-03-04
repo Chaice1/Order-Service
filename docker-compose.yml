@@ -1,0 +1,46 @@
+
+
+
+services:
+    db:
+      image: postgres:15-alpine
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: "Ivbln173"
+        POSTGRES_DB: user_db
+      healthcheck:  
+        test: ["CMD-SHELL","pg_isready -U postgres -d user_db"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      ports:
+        - "5432:5432"
+      volumes:
+        - pg_data:/var/lib/postgresql/data
+    redis:
+      image: redis:7-alpine
+      restart: always
+      ports:
+        - "6379:6379"
+    user_service:
+      build: .
+      restart: on-failure
+      ports:
+        - "8082:8082"
+      environment:
+        - DB_DSN=postgres://postgres:Ivbln173@db:5432/user_db?sslmode=disable
+        - JWT_KEY=$(JWT_KEY)
+        - REDIS_ADDR=redis:6379
+        - ADMIN_USERNAME=${ADMIN_USERNAME}
+        - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      depends_on:
+        db:
+          condition: service_healthy
+        redis:
+          condition: service_started
+        
+
+volumes:
+  pg_data:
+

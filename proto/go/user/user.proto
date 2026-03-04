@@ -8,15 +8,36 @@ import "buf/validate/validate.proto";
 
 service UserService{
     rpc GetUser(GetUserRequest) returns (GetUserResponce);
+    rpc Login(LoginRequest) returns (LoginResponce);
+    rpc Register(RegisterRequest) returns (RegisterResponce);
 }
 
 message GetUserRequest{
-    string user_id = 1 [(buf.validate.field).string.min_len = 1];
+    string user_id = 1 [(buf.validate.field).string.min_len = 4];
 }
 
 message GetUserResponce{
-    string id = 1 [(buf.validate.field).string.min_len = 1];
-    string username = 2 [(buf.validate.field).string.min_len = 1];
-    bool is_active = 3;
+    string user_id = 1;
+    string username = 2;
+    string role = 3;
+    bool is_active = 4;
+}
+
+message LoginRequest{
+    string username = 1 [(buf.validate.field).string.min_len = 4];
+    string password = 2 [(buf.validate.field).string.min_len = 6];
+}
+
+message LoginResponce{
+    string token = 1;
+}
+
+message RegisterRequest{
+    string username = 1 [(buf.validate.field).string.min_len = 4];
+    string password = 2 [(buf.validate.field).string.min_len = 6];
+}
+
+message RegisterResponce{
+    string user_id = 1;
 }
 
