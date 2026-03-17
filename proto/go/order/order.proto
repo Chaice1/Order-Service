@@ -1,0 +1,41 @@
+syntax="proto3";
+
+package proto.go.order;
+
+option go_package="github.com/Chaice1/Order-Service/proto/go/order;orderpb";
+
+import "buf/validate/validate.proto";
+
+service OrderService{
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+}
+
+
+message Good{
+    string id=1;
+    string name_of_good = 2 [(buf.validate.field).string.min_len = 1];
+    double price=3 [(buf.validate.field).double.gt = 0]; 
+    int64 count=4 [(buf.validate.field).int64.gt = 0];
+}
+
+message CreateOrderRequest{
+    repeated Good goods = 1 [(buf.validate.field).repeated.min_items=1];
+}
+
+message CreateOrderResponse{
+    string order_id=1;
+    string status = 2;
+}
+
+message GetOrderRequest{
+    string order_id=1;
+}
+
+message GetOrderResponse{
+    string order_id=1;
+    string user_id=2;
+    double total_price=3;
+    string status=4;
+    repeated Good goods = 5;
+}
