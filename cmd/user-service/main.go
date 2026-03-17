@@ -3,18 +3,20 @@ package main
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"io"
 	"log"
 	"net"
 	"os"
 
+	"github.com/jackc/pgx/v5"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"buf.build/go/protovalidate"
 	userpb "github.com/Chaice1/Order-Service/gen/go/user"
-	"github.com/Chaice1/Order-Service/internal/user/interceptor"
+	"github.com/Chaice1/Order-Service/internal/pkg/interceptor"
 	userrepo "github.com/Chaice1/Order-Service/internal/user/repository"
-	"github.com/Chaice1/Order-Service/internal/user/service"
+	Userservice "github.com/Chaice1/Order-Service/internal/user/service"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"github.com/pressly/goose"
@@ -48,12 +50,15 @@ func (uss *UserServiceServer) GetUser(ctx context.Context, req *userpb.GetUserRe
 
 	requested_id := req.GetUserId()
 	if id != requested_id && role != "admin" {
-		return nil, status.Error(codes.PermissionDenied, codes.Unauthenticated.String())
+		return nil, status.Error(codes.PermissionDenied, codes.PermissionDenied.String())
 	}
 
 	user, err := uss.us.GetUser(ctx, req.GetUserId())
 	if err != nil {
-		return nil, status.Error(codes.NotFound, codes.NotFound.String())
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, status.Error(codes.NotFound, codes.NotFound.String())
+		}
+		return nil, status.Error(codes.Internal, codes.Internal.String())
 	}
 
 	return &userpb.GetUserResponce{
@@ -99,9 +104,7 @@ func RunMigrations(dsn string) {
 }
 func main() {
 
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
+	godotenv.Load()
 
 	validator, err := protovalidate.New()
 	if err != nil {
@@ -128,7 +131,7 @@ func main() {
 	redisdb := redis.NewClient(&redis.Options{Addr: os.Getenv("REDIS_ADDR")})
 
 	repo := userrepo.NewRepo(pool, redisdb)
-	us := service.NewService(repo)
+	us := Userservice.NewService(repo)
 	repo.CreateAdmin(context.Background(), os.Getenv("ADMIN_USERNAME"), os.Getenv("ADMIN_PASSWORD"))
 	UserService := &UserServiceServer{
 		us: us,
