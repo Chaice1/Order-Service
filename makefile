@@ -32,4 +32,3 @@ migrate-status:
 
 .PHONY: .bin-deps
 
-# что сделал другую ветку типо user-service-internal и мб + main во ттакое что-то 
