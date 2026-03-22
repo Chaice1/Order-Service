@@ -35,7 +35,7 @@ cp .env.example .env
 Заполните переменные: JWT_KEY, ADMIN_PASSWORD, CHAT_ID.
 
 
-#### 2.Запуск системы:
+#### 2.Запуск системы с помощью makefile с docker:
 
 1.  Клонируйте репозиторий:
     ```bash
