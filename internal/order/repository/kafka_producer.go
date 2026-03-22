@@ -16,7 +16,8 @@ func NewOrderProducer(broker string) *OrderProducer {
 		Addr:         kafka.TCP(broker),
 		Topic:        "created_order",
 		Balancer:     &kafka.LeastBytes{},
-		RequiredAcks: kafka.RequireAll,
+		RequiredAcks: kafka.RequireOne,
+		Async:        true,
 	}}
 }
 
