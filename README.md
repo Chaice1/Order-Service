@@ -27,7 +27,7 @@ Transactional Integrity (ACID): Атомарное создание заказа
 Event-Driven Communication: Полная развязка сервисов заказов и уведомлений через Kafka.
 
 ## Запуск программы и настройка окружения
-1. **Настройка окружения**
+1. Настройка окружения
 Создайте .env из шаблона:
 ```bash
 cp .env.example .env
@@ -35,7 +35,7 @@ cp .env.example .env
 Заполните переменные: JWT_KEY, ADMIN_PASSWORD, CHAT_ID.
 
 
-2. **Запуск системы**:
+2. Запуск системы:
 
 1.  Клонируйте репозиторий:
     ```bash
@@ -67,3 +67,4 @@ cp .env.example .env
 | `GET` | `/auth/get_user` | Получение профиля (кэш Redis / PostgreSQL) |
 | `POST` | `/auth/create_order` | Создание заказа и отправка события в Kafka |
 | `GET` | `/auth/get_order` | Просмотр деталей заказа (JOIN orders & items) |
+
