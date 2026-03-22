@@ -1,5 +1,5 @@
 
-##Distributed Order Management System
+## Distributed Order Management System
 Высокопроизводительная микросервисная система управления заказами на языке Go. 
 ##Архитектура системы
 Система состоит из 4-х микросервисов, объединенных в единую экосистему через gRPC и Kafka:
@@ -12,13 +12,13 @@
 
 4.Notification Service: Асинхронный обработчик событий. Интегрирован с Telegram Bot API для мгновенного уведомления о новых заказах.
 
-##Технологический стек
+## Технологический стек
 Язык: Go 
 Базы данных: PostgreSQL (pgxpool), Redis (Caching)
 Транспорт: gRPC, HTTP (Gin), Kafka (Event Streaming)
 Инструментарий: Docker, Docker Compose, Goose (Migrations), Protobuf (Buf)
 
-##Ключевые особенности и оптимизации
+## Ключевые особенности и оптимизации
 High-Performance Caching: Реализован паттерн Cache-Aside. Профили пользователей кэшируются в Redis, что снижает нагрузку на PostgreSQL и ускоряет типичные запросы в 10-20 раз.
 Cache Stability:
 Singleflight: Защита от Cache Stampede — база данных не перегружается при одновременном обращении тысяч пользователей к одному ресурсу.
@@ -26,7 +26,7 @@ Jitter: Размазывание времени жизни кэша (TTL) для
 Transactional Integrity (ACID): Атомарное создание заказа и его состава с использованием транзакций и метода Bulk Insert (CopyFrom).
 Event-Driven Communication: Полная развязка сервисов заказов и уведомлений через Kafka.
 
-##Запуск программы и настройка окружения
+## Запуск программы и настройка окружения
 1. Настройка окружения
 Создайте .env из шаблона:
 ```bash
@@ -57,7 +57,7 @@ cp .env.example .env
     make stop
     ```
 
-##API Endpoints
+## API Endpoints
 Метод	Эндпоинт	Описание
 POST /register	Регистрация пользователя
 POST /login	Вход и получение токена
