@@ -18,7 +18,7 @@ func main() {
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{os.Getenv("KAFKA_ADDR")},
 		Topic:   "created_order",
-		GroupID: "notification_service",
+		GroupID: "notification_service1",
 	})
 
 	consumer := notificationadapter.NewConsumer(reader, TgBot)
